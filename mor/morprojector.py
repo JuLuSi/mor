@@ -1,5 +1,6 @@
-from firedrake import TrialFunction, TestFunction, assemble, dx, inner, grad
 from petsc4py import PETSc
+import firedrake
+from firedrake import TrialFunction, TestFunction, assemble, dx, inner, grad
 import numpy as np
 import scipy.sparse as sp
 
@@ -65,6 +66,11 @@ class MORProjector(object):
         w = w[idx]
         v = v[:, idx]
 
+        # Skip negative entries
+        idx_neg = np.argwhere(w < 0)
+        # Reduce number of basis to min(n_basis, first_negative_eigenvalue)
+        n_basis = np.minimum(n_basis, idx_neg[0][0])
+
         psi_mat = np.zeros((self.snaps[-1].function_space().dof_count, n_basis))
 
         for i in range(n_basis):
@@ -100,8 +106,11 @@ class MORProjector(object):
 
     def project_function(self, f, func_type='petsc'):
         fp, _ = self.basis_mat.createVecs()
-        with f.dat.vec as vec:
-            self.basis_mat.multTranspose(vec, fp)
+        if type(f) is firedrake.Function:
+            with f.dat.vec as vec:
+                self.basis_mat.multTranspose(vec, fp)
+        else:
+            self.basis_mat.multTranspose(f, fp)
 
         if func_type == 'petsc':
             return fp
