@@ -11,7 +11,8 @@ def petsc2sp(A):
 
 
 class MORProjector(object):
-    def __init__(self):
+    def __init__(self, default_type='petsc'):
+        self.default_type = default_type
         self.snaps = []
         self.snap_mat = None
         self.n_basis = 0
@@ -68,8 +69,9 @@ class MORProjector(object):
 
         # Skip negative entries
         idx_neg = np.argwhere(w < 0)
-        # Reduce number of basis to min(n_basis, first_negative_eigenvalue)
-        n_basis = np.minimum(n_basis, idx_neg[0][0])
+        if len(idx_neg) > 0:
+            # Reduce number of basis to min(n_basis, first_negative_eigenvalue)
+            n_basis = np.minimum(n_basis, idx_neg[0][0])
 
         psi_mat = np.zeros((self.snaps[-1].function_space().dof_count, n_basis))
 
@@ -90,6 +92,10 @@ class MORProjector(object):
         self.basis_mat.assemble()
 
         return ratio
+
+    def get_basis_mat(self):
+        assert self.basis_mat is not None
+        return self.basis_mat
 
     def project_operator(self, oper, oper_type='petsc'):
         if type(oper) is firedrake.matrix.Matrix:
