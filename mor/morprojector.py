@@ -6,8 +6,19 @@ import scipy.sparse as sp
 
 
 def petsc2sp(A):
-    Asp = A.getValuesCSR()[::-1]
-    return sp.csr_matrix(Asp)
+    """Creates scipy sparse matrix/numpy array from a PETSc matrix/vector.
+    
+    :arg A: PETSc matrix/vector A
+    :returns: Scipy sparse matrix/numpy array
+    """
+    if A.Type == PETSc.Vec.Type:
+        return A.array.reshape(1, A.local_size)
+    else:
+        if A.getInfo()['nz_used'] is 0.0:
+            return sp.csr_matrix(A.size, shape=A.local_size)
+        else:
+            Asp = A.getValuesCSR()[::-1]
+            return sp.csr_matrix(Asp, shape=A.local_size)
 
 
 class MORProjector(object):
