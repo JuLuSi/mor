@@ -11,6 +11,12 @@ def petsc2sp(A):
 
 
 class MORProjector(object):
+    """Model Order Reduction Projector
+
+    The main object to handle storage and projection using basis functions.
+
+    :arg default_type: (optional) type for the assumed vector or matrix.
+    """
     def __init__(self, default_type='petsc'):
         self.default_type = default_type
         self.snaps = []
@@ -19,9 +25,14 @@ class MORProjector(object):
         self.basis_mat = None
 
     def take_snapshot(self, u):
+        """Store a snapshot
+
+        :arg u: a :class:`firedrake.Function`
+        """
         self.snaps.append(u.copy(deepcopy=True))
 
     def snapshots_to_matrix(self):
+        """Convert the snapshots to a matrix"""
         # DOFs x timesteps
         self.snap_mat = np.zeros((self.snaps[-1].function_space().dof_count, len(self.snaps)))
 
@@ -32,6 +43,14 @@ class MORProjector(object):
         return self.snap_mat.shape[1]
 
     def compute_basis(self, n_basis, inner_product="L2", time_scaling=False, delta_t=None):
+        """
+
+        :arg n_basis: Number of basis.
+        :arg inner_product: Type of inner product (L2 or H1).
+        :arg time_scaling: Use time scaling.
+        :arg delta_t: :class:`numpy.ndarray` with used timesteps to scale.
+        :return: Estimated error.
+        """
         # Build inner product matrix
         V = self.snaps[-1].function_space()
         if inner_product == "L2":
@@ -94,10 +113,17 @@ class MORProjector(object):
         return ratio
 
     def get_basis_mat(self):
+        """Return the basis mat"""
         assert self.basis_mat is not None
         return self.basis_mat
 
     def project_operator(self, oper, oper_type='petsc'):
+        """Project an operator.
+
+        :param oper: :class:`firedrake.matrix.Matrix`.
+        :param oper_type: Type of returned operator.
+        :return: Projected operator.
+        """
         if type(oper) is firedrake.matrix.Matrix:
             A = oper.M.handle
         else:
@@ -111,6 +137,12 @@ class MORProjector(object):
             return petsc2sp(Ap).todense()
 
     def project_function(self, f, func_type='petsc'):
+        """Project a function from full space to reduced space.
+
+        :param f: :class:`firedrake.Function`.
+        :param func_type: Type of returned function.
+        :return: Projected function.
+        """
         fp, _ = self.basis_mat.createVecs()
         if type(f) is firedrake.Function:
             with f.dat.vec as vec:
@@ -124,6 +156,12 @@ class MORProjector(object):
             return fp.array
 
     def recover_function(self, fp, func_type='petsc'):
+        """Recover project function from reduced space to full space.
+
+        :param fp: Function of type func_type.
+        :param func_type: Type of the input function.
+        :return: Recovered function.
+        """
         if func_type == 'scipy':
             fp_petsc, _ = self.basis_mat.createVecs()
             fp_petsc.setValues(range(fp.shape[0]), fp)
