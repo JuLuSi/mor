@@ -9,7 +9,7 @@ def petsc2sp(A):
     """Creates scipy sparse matrix/numpy array from a PETSc matrix/vector.
     
     :arg A: PETSc matrix/vector A
-    :returns: Scipy sparse matrix/ numpy array
+    :returns: Scipy sparse matrix/numpy array
     """
     if A.Type == PETSc.Vec.Type:
         return A.array.reshape(1, A.local_size)
