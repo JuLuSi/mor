@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morprojector module &mdash; mor 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="morpc.html">morpc module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>morprojector module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/morprojector.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mor.morprojector">
+<span id="morprojector-module"></span><h1>morprojector module<a class="headerlink" href="#module-mor.morprojector" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="mor.morprojector.MORProjector">
+<em class="property">class </em><code class="descclassname">mor.morprojector.</code><code class="descname">MORProjector</code><span class="sig-paren">(</span><em>default_type='petsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Model Order Reduction Projector</p>
+<p>The main object to handle storage and projection using basis functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>default_type</strong> – (optional) type for the assumed vector or matrix.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.compute_basis">
+<code class="descname">compute_basis</code><span class="sig-paren">(</span><em>n_basis</em>, <em>inner_product='L2'</em>, <em>time_scaling=False</em>, <em>delta_t=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.compute_basis" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_basis</strong> – Number of basis.</li>
+<li><strong>inner_product</strong> – Type of inner product (L2 or H1).</li>
+<li><strong>time_scaling</strong> – Use time scaling.</li>
+<li><strong>delta_t</strong> – <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code> with used timesteps to scale.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Estimated error.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.get_basis_mat">
+<code class="descname">get_basis_mat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.get_basis_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the basis mat</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.project_function">
+<code class="descname">project_function</code><span class="sig-paren">(</span><em>f</em>, <em>func_type='petsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.project_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project a function from full space to reduced space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> – <code class="xref py py-class docutils literal"><span class="pre">firedrake.Function</span></code>.</li>
+<li><strong>func_type</strong> – Type of returned function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Projected function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.project_operator">
+<code class="descname">project_operator</code><span class="sig-paren">(</span><em>oper</em>, <em>oper_type='petsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.project_operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project an operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>oper</strong> – <code class="xref py py-class docutils literal"><span class="pre">firedrake.matrix.Matrix</span></code>.</li>
+<li><strong>oper_type</strong> – Type of returned operator.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Projected operator.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.recover_function">
+<code class="descname">recover_function</code><span class="sig-paren">(</span><em>fp</em>, <em>func_type='petsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.recover_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recover project function from reduced space to full space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fp</strong> – Function of type func_type.</li>
+<li><strong>func_type</strong> – Type of the input function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Recovered function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.snapshots_to_matrix">
+<code class="descname">snapshots_to_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.snapshots_to_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the snapshots to a matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mor.morprojector.MORProjector.take_snapshot">
+<code class="descname">take_snapshot</code><span class="sig-paren">(</span><em>u</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.MORProjector.take_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a snapshot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>u</strong> – a <code class="xref py py-class docutils literal"><span class="pre">firedrake.Function</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="mor.morprojector.petsc2sp">
+<code class="descclassname">mor.morprojector.</code><code class="descname">petsc2sp</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="headerlink" href="#mor.morprojector.petsc2sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates scipy sparse matrix/numpy array from a PETSc matrix/vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>A</strong> – PETSc matrix/vector A</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Scipy sparse matrix/numpy array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Julian Andrej.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
