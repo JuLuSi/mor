@@ -42,7 +42,7 @@ class MORProjector(object):
         """
         self.snaps.append(u.copy(deepcopy=True))
 
-    def snapshots_to_matrix(self):
+    def _snapshots_to_matrix(self):
         """Convert the snapshots to a matrix"""
         # DOFs x timesteps
         self.snap_mat = np.zeros((self.snaps[-1].function_space().dof_count, len(self.snaps)))
@@ -72,7 +72,7 @@ class MORProjector(object):
 
         ip_mat = assemble(ip_form, mat_type="aij").M.handle
 
-        M = self.snapshots_to_matrix()
+        M = self._snapshots_to_matrix()
 
         # This matrix is symmetric positive semidefinite
         corr_mat = np.matmul(self.snap_mat.transpose(), petsc2sp(ip_mat).dot(self.snap_mat))
