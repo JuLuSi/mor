@@ -70,12 +70,12 @@ class MORProjector(object):
             ip_form = inner(TrialFunction(V), TestFunction(V)) * dx + inner(grad(TrialFunction(V)),
                                                                             grad(TestFunction(V))) * dx
 
-        ip_mat = assemble(ip_form, mat_type="aij").M.handle
+        self.ip_mat = assemble(ip_form, mat_type="aij").M.handle
 
         M = self.snapshots_to_matrix()
 
         # This matrix is symmetric positive semidefinite
-        corr_mat = np.matmul(self.snap_mat.transpose(), petsc2sp(ip_mat).dot(self.snap_mat))
+        corr_mat = np.matmul(self.snap_mat.transpose(), petsc2sp(self.ip_mat).dot(self.snap_mat))
 
         # Build time scaling diagonal matrix
         if time_scaling is True and delta_t is not None:
@@ -166,6 +166,28 @@ class MORProjector(object):
         elif func_type == 'scipy':
             return fp.array
 
+    def project_state_function(self, f, func_type='petsc'):
+        """Project a function containing the state information, e.g. the initial state, to reduced space.
+
+        :param f: :class:`firedrake.Function`.
+        :param func_type: Type of returned function.
+        :return: Projected function.
+        """
+        ft, _ = self.ip_mat.createVecs()
+        fp, _ = self.basis_mat.createVecs()
+        if type(f) is firedrake.Function:
+            with f.dat.vec as vec:
+                self.ip_mat.mult(vec,ft)
+                self.basis_mat.multTranspose(ft, fp)
+        else:
+            self.ip_mat.mult(f,ft)
+            self.basis_mat.multTranspose(ft, fp)
+
+        if func_type == 'petsc':
+            return fp
+        elif func_type == 'scipy':
+            return fp.array
+
     def recover_function(self, fp, func_type='petsc'):
         """Recover project function from reduced space to full space.
 
@@ -185,3 +207,4 @@ class MORProjector(object):
                 self.basis_mat.mult(fp, vec)
 
         return f
+
