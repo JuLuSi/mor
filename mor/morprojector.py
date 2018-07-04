@@ -82,8 +82,6 @@ class MORProjector(object):
             D = np.zeros((len(self.snaps), len(self.snaps)))
             for i in range(len(self.snaps)):
                 D[i, i] = np.sqrt(delta_t[i])
-            D[0, 0] = np.sqrt(delta_t[0] / 2.0)
-            D[-1, -1] = np.sqrt(delta_t[-1] / 2.0)
 
             # D'MD
             corr_mat = np.matmul(D.transpose(), np.matmul(corr_mat, D))
@@ -105,8 +103,12 @@ class MORProjector(object):
 
         psi_mat = np.zeros((self.snaps[-1].function_space().dof_count, n_basis))
 
-        for i in range(n_basis):
-            psi_mat[:, i] = self.snap_mat.dot(v[:, i]) / np.sqrt(w[i])
+        if time_scaling is True and delta_t is not None:
+            for i in range(n_basis):
+                psi_mat[:, i] = self.snap_mat.dot(v[:, i]) * D[i,i] / np.sqrt(w[i])
+        else:
+            for i in range(n_basis):
+                psi_mat[:, i] = self.snap_mat.dot(v[:, i]) / np.sqrt(w[i])
 
         ratio = np.sum(w[:n_basis]) / np.sum(w[:M])
 
